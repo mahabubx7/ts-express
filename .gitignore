@@ -1,0 +1,21 @@
+# Nodejs environment
+node_modules/
+dist/
+
+# Environment variables
+.env
+.environment
+.env.local
+.env.prod
+.env.production
+.env.test
+.env.staging
+.env.dev
+!.env.sample
+!.env.example
+
+# OS Specific
+.DS_Store
+.exe
+.dll
+.ini

@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "CommonJS",
+    "lib": ["ESNext"],
+    "removeComments": true,
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "rootDirs": ["src", "prisma"],
+    "outDir": "dist",
+    "baseUrl": ".",
+    "paths": {
+      "@": ["./src/"],
+      "@config": ["./src/config/"],
+      "@jobs": ["./src/app/jobs/"],
+      "@modules": ["./src/app/modules/"],
+      "@core": ["./src/core/"],
+      "@guards": ["./src/app/guards/"],
+      "@router": ["./src/app/routes/"]
+    },
+  },
+  "files": [
+    "./src/core/express.d.ts"
+  ],
+  "include": ["src", "prisma"],
+  "exclude": ["**/node_modules", "**/dist/**"]
+}

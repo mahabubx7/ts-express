@@ -1,0 +1,59 @@
+{
+  "name": "express-ts-blueprint",
+  "version": "1.0.0",
+  "description": "real-world-project-starter-express-ts",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 'test...'",
+    "compile": "tsc",
+    "compile:watch": "tsc -w",
+    "clean": "npx rimraf dist",
+    "start": "nodemon --exec ts-node -r tsconfig-paths/register src/main.ts",
+    "start:prod": "node -r ts-node/register/transpile-only -r tsconfig-paths/register ./dist/main.js",
+    "build": "npm run clean && npm run compile",
+    "build:preview": "npm run build && npm run start:prod",
+    "prisma:gen": "npx prisma generate"
+  },
+  "keywords": [
+    "express",
+    "typescript"
+  ],
+  "author": "Mahabub <mahabubx7@gmail.com>",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@types/cookie-parser": "^1.4.5",
+    "@types/cors": "^2.8.15",
+    "@types/express": "^4.17.20",
+    "@types/jsonwebtoken": "^9.0.4",
+    "@types/node": "^20.8.10",
+    "@types/passport": "^1.0.14",
+    "@types/passport-google-oauth2": "^0.1.7",
+    "@types/passport-jwt": "^3.0.12",
+    "@types/passport-local": "^1.0.37",
+    "nodemon": "^3.0.1",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.1",
+    "tsconfig-paths": "^4.2.0",
+    "typescript": "^5.2.2"
+  },
+  "dependencies": {
+    "argon2": "^0.31.1",
+    "compression": "^1.7.4",
+    "cookie-parser": "^1.4.6",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-async-errors": "^3.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^5.13.21",
+    "node-cron": "^3.0.2",
+    "passport": "^0.6.0",
+    "passport-google-oauth2": "^0.2.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0",
+    "zod": "^3.22.4"
+  }
+}
