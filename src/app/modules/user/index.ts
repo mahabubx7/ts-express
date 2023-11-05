@@ -31,3 +31,4 @@ v1UserHandler.get('/:id', [DtoGuard(queryWithId)], getUser);
 // exports
 export * from  './user.model';
 export * from  './user.query';
+export * from './user.role'

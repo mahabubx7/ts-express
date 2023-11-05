@@ -20,3 +20,5 @@ export const globalErrorHandlerPipe = (
 // exports
 export * from './custom.exception';
 export * from './dto.exception';
+export * from './notfound.exception';
+export * from './unauthorized.exception';

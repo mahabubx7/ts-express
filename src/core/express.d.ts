@@ -1,15 +1,20 @@
-import { Express, Response } from 'express'
+import { Express, Response } from "express";
+import { UserAuthData } from '@core'
 
 declare global {
   namespace Express {
     interface Response {
       toJson: (
-        // this: Response,
         data: any,
         error?: any,
         statusCode?: number,
-        message?: string,
+        message?: string
       ) => void;
+    }
+
+    interface User extends UserAuthData {}
+    interface Request {
+      user: UserAuthData
     }
   }
 }

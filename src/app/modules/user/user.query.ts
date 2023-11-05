@@ -1,7 +1,7 @@
 import { Model, ObjectId } from "mongoose";
 import { User, UserModel } from "./user.model";
 
-class UserQuery {
+export class UserQuery {
   private readonly mongo: Model<User, any, any>;
 
   constructor() {
@@ -20,11 +20,15 @@ class UserQuery {
     return await this.mongo.findById(id).select('-__v');
   }
 
-  async getUserByEmail(email: string): Promise<User | null> {
-    return await this.mongo.findOne({ email }).select('-__v -password');;
+  async userLogin(email: string): Promise<User | null> {
+    return await this.mongo.findOne({ email }).select('-__v');
   }
 
-  async addUser(user: User): Promise<User | null> {
+  async getUserByEmail(email: string): Promise<User | null> {
+    return await this.mongo.findOne({ email }).select('-__v -password');
+  }
+
+  async addUser(user: User): Promise<User> {
     return await this.mongo.create(user);
   }
 

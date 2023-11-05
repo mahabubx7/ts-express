@@ -10,13 +10,15 @@ import { applyModifications, globalErrorHandlerPipe, setupPassportPlugins } from
 
 
 const app: Application = express();
-applyModifications(app);
 app.use(json());
 app.use(cookieParser());
+
+applyModifications(app);
+app.use(passport.initialize());
+setupPassportPlugins(passport); // passport.js auth middlewares
+
 app.use(urlencoded({ extended: true }));
 app.use('/_static', express.static(path.resolve(__dirname, './public')));
-app.use(passport.initialize());
-setupPassportPlugins(); // passport.js middlewares
 
 // Establish database connection
 (async () => {

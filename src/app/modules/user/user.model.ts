@@ -1,5 +1,6 @@
 import { Schema, model, Document } from "mongoose"
 import { Role } from "./user.role";
+import { hashPassword } from "@core";
 
 export interface User extends Document {
   name: string
@@ -35,6 +36,21 @@ const userSchema = new Schema<User>({
   },
 }, {
   timestamps: true,
+});
+
+// hash the password
+userSchema.pre('save', async function (next) {
+  const user = this as User;
+  if (!user.isModified('password')) {
+    return next();
+  }
+
+  try {
+    user.password = await hashPassword(user.password);
+    next();
+  } catch (err: any) {
+    return next(err);
+  }
 });
 
 export const UserModel  = model('User', userSchema);
