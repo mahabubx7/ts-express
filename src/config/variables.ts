@@ -24,3 +24,12 @@ export const IsTestMode: boolean =
 
 // Database
 export const DatabaseUri: string = String(process.env.DATABASE_URL)
+
+// NodeMailer
+export const MAILER_HOST: string = String(process.env.MAILER_HOST)
+export const MAILER_USER: string = String(process.env.MAILER_USER)
+export const MAILER_PASS: string = String(process.env.MAILER_PASS)
+
+// Redis
+export const REDIS_HOST: string = String(process.env.REDIS_HOST)
+export const REDIS_PORT: number = Number(process.env.REDIS_PORT)

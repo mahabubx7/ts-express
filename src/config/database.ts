@@ -5,8 +5,9 @@ export const connectMongoDB = async () => {
   await connect(DatabaseUri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    useFindAndModify: true,
   }).then(() => {
-    console.log('🥭 MongoDB is connected!');
+    console.log('🥭 MongoDB connection is established!');
   })
   .catch((err) => {
     console.error(err)

@@ -1,15 +1,9 @@
-import { Controller, CustomException } from "@core";
+import { Controller } from "@core";
 import { userQuery } from "./user.query";
 
 export const getUsers: Controller = async (_, res) => {
-  // const users = await userQuery.getUsers();
-
-  throw new CustomException('Test global error!')
-
-  // res.status(200).json({
-  //   data: users,
-  //   apiVersion: 'v1'
-  // })
+  const users = await userQuery.getUsers();
+  res.toJson(users);
 };
 
 export const getUser: Controller = async (req, res) => {

@@ -1,6 +1,5 @@
 import { Router } from "express";
-import { v1TodoHandler, v1UserHandler } from "@modules";
-import { authRoute } from "@modules";
+import { authRoute, todoRoute, userRoute } from "@modules";
 
 export const v1 = Router();
 
@@ -8,8 +7,8 @@ export const v1 = Router();
 
 v1.use('/auth', authRoute); // Auth
 
-v1.use('/todo', v1TodoHandler); // Todo
+v1.use('/todo', todoRoute); // Todo
 
-v1.use('/user', v1UserHandler); // User
+v1.use('/user', userRoute); // User
 
 // ::::::::::::::: //REGISTER ALL MODULE HANDLERS ::::::::::::::: //

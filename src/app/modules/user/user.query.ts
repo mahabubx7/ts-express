@@ -9,7 +9,7 @@ export class UserQuery {
   }
 
   async getUsers(): Promise<User[]> {
-    return await this.mongo.find({}).select('-__v -password');
+    return await this.mongo.find({ isDeleted: false }).select('-__v -password');
   }
 
   async getUser(id: ObjectId | string): Promise<User | null> {
@@ -21,7 +21,7 @@ export class UserQuery {
   }
 
   async userLogin(email: string): Promise<User | null> {
-    return await this.mongo.findOne({ email }).select('-__v');
+    return await this.mongo.findOne({ email, isDeleted: false }).select('-__v');
   }
 
   async getUserByEmail(email: string): Promise<User | null> {

@@ -1,4 +1,4 @@
-import { Controller } from '@core'
+import { Controller, CustomException, makeMail, sendMail } from '@core'
 import { authQuery } from './auth.query';
 import { cookieOptions } from '@config';
 
@@ -25,6 +25,29 @@ export const registerUser: Controller = async (req, res) => {
     ua: req.headers['user-agent'],
     ip: req.ip,
   });
+
+  // test mailer
+    const mailInfo = await makeMail({
+      to: data.email,
+      subject: 'Registration Successful!',
+      html: `
+        <html>
+          <head>
+            <title>Registration Successful!</title>
+          </head>
+          <body>
+            <h1>Dear, ${data.name}</h1>
+            <h2>Registration Successful!</h2>
+            <hr />
+            <h3>Please verify your e-mail address to active your account</h3>
+            <a href="http://localhost:5000/api">verify</a>
+          </body>
+        </html>
+      `,
+    });
+
+
+  sendMail(mailInfo); // sending email
 
   res.cookie('access_token', accessToken, cookieOptions);
 
