@@ -9,29 +9,31 @@ import passport from 'passport';
 import { router } from '@router';
 import { PORT, connectMongoDB } from '@config';
 import { applyModifications, globalErrorHandlerPipe, setupPassportPlugins } from '@core';
-import { redis } from '@config';
+import { redis } from './core/redis';
 
 
 const app: Application = express();
+
 app.use(json());
+app.use(urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(compression());
+
 app.use('/api', cors({ credentials: true })); // For APIs only
+applyModifications(app);
 app.use(helmet({
   hidePoweredBy: true,
 }));
 
-applyModifications(app);
 app.use(passport.initialize());
 setupPassportPlugins(passport); // passport.js auth middlewares
 
-app.use(urlencoded({ extended: true }));
 app.use('/_static', express.static(path.resolve(__dirname, './public')));
 
 // Establish database connection
 (async () => {
   await connectMongoDB();
-  await redis.connect();
+  redis.once('connect', () => console.info(`🍎 Redis connection is established!`));
 })();
 
 // app.use(asyncRouteHandler(router)); // should be at last

@@ -1,5 +1,6 @@
+import crypto from 'node:crypto';
 import { sign, verify } from "jsonwebtoken";
-import { JWT_SECRET } from "@config";
+import { APP_SECRET, JWT_SECRET } from "@config";
 import { ObjectId } from "mongoose";
 import { Role } from "@modules";
 
@@ -19,9 +20,15 @@ export interface TokenDataType {
 
 export class Token {
   private readonly jwtSecret: string;
+  private readonly appSecret: string;
 
   constructor() {
     this.jwtSecret = JWT_SECRET;
+    this.appSecret = APP_SECRET;
+  }
+
+  genToken() {
+    return crypto.randomUUID();
   }
 
   generateJwt({ data, expires }: JwtTokenGenOptions) {

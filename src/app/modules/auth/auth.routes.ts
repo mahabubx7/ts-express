@@ -1,8 +1,8 @@
-import { Router } from "express";
-import { loginUser, registerUser } from "./auth.controller";
-import { DtoGuard } from "src/app/guards";
-import { loginUserDto, registerUserDto } from "./dto";
 import passport from "passport";
+import { Router } from "express";
+import { DtoGuard } from "@guards";
+import { loginUser, registerUser } from "./auth.controller";
+import { loginUserDto, registerUserDto } from "./dto";
 
 export const authRoute = Router();
 
@@ -17,3 +17,11 @@ authRoute.post('/register', [
   DtoGuard(registerUserDto),
   // passport.authenticate('local', { session: false }),
 ], registerUser);
+
+
+// user user email_verification/active
+
+// user forget-password/send-mail
+
+// user forget-password/verify_n_update
+

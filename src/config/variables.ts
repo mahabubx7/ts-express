@@ -6,6 +6,8 @@ export const JWT_SECRET: string = String(process.env.JWT_SECRET) || 'secret';
 
 export const HASH_SECRET: string = String(process.env.HASH_SECRET) || 'top_secret'
 
+export const APP_SECRET: string = String(process.env.APP_SECRET_KEY) || 'app_secret'
+
 export const GET_NODE_ENV = () => {
   return String(process.env.NODE_ENV) || 'dev'; // default: devMode
 }
@@ -33,3 +35,4 @@ export const MAILER_PASS: string = String(process.env.MAILER_PASS)
 // Redis
 export const REDIS_HOST: string = String(process.env.REDIS_HOST)
 export const REDIS_PORT: number = Number(process.env.REDIS_PORT)
+export const REDIS_URI: string = String(process.env.REDIS_URI)

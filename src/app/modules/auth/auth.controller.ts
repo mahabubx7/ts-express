@@ -1,8 +1,14 @@
-import { Controller, CustomException, makeMail, sendMail } from '@core'
+import { Controller, Token, cookEmailHtml, makeMail, addToRedis } from '@core'
 import { authQuery } from './auth.query';
 import { cookieOptions } from '@config';
+import { sentEmailVerification } from '@jobs';
 
 export const loginUser: Controller = async (req, res) => {
+  /**
+   * @Passport
+   * Passport middleware validates user
+   * Validated info & others available in `req.user`
+   */
   const { user } = req;
 
   res.cookie('access_token', user?.accessToken, cookieOptions);
@@ -26,28 +32,35 @@ export const registerUser: Controller = async (req, res) => {
     ip: req.ip,
   });
 
-  // test mailer
-    const mailInfo = await makeMail({
-      to: data.email,
-      subject: 'Registration Successful!',
-      html: `
-        <html>
-          <head>
-            <title>Registration Successful!</title>
-          </head>
-          <body>
-            <h1>Dear, ${data.name}</h1>
-            <h2>Registration Successful!</h2>
-            <hr />
-            <h3>Please verify your e-mail address to active your account</h3>
-            <a href="http://localhost:5000/api">verify</a>
-          </body>
-        </html>
-      `,
+  // sends verification email to active account
+  const token = new Token().genToken()
+  await makeMail({
+    to: data.email,
+    subject: 'Registration Successful!',
+    html: cookEmailHtml(req, {
+      name: data.name,
+      linkPostfix: `/api/v1/verify/email?token=${token}`,
+      linkExpire: (30 * 60 * 1000).toString(), // 30m
+    }),
+  }).then(async (mail) => {
+    await sentEmailVerification({
+      /**
+       * @Queue *BullMQ*
+       * Verify Email & Active account
+       * Enqueue a task for sending email
+       * It sends the verification link & registration welcome message!
+       */
+      mail: mail,
+    }); // adding mail sending task into emailVerifyQueue
+    addToRedis(token, {
+      tokenType: 'email_verify',
+      userId: data._id,
+      makeActive: true,
     });
+  });
 
 
-  sendMail(mailInfo); // sending email
+
 
   res.cookie('access_token', accessToken, cookieOptions);
 
