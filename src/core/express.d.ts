@@ -1,20 +1,23 @@
 import { Express, Response } from "express";
-import { UserAuthData } from '@core'
+import { TokenDataType, UserAuthData, RequestState } from '@core'
 
 declare global {
   namespace Express {
     interface Response {
-      toJson: (
-        data: any,
+      toJson<T = any> (
+        data: T | Partial<T>,
         error?: any,
         statusCode?: number,
         message?: string
-      ) => void;
+      ): void;
     }
 
-    interface User extends UserAuthData {}
+    interface User extends TokenDataType {}
+    interface State extends RequestState {}
+
     interface Request {
-      user: UserAuthData
+      user: User
+      state: State
     }
   }
 }

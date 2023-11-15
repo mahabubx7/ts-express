@@ -22,3 +22,4 @@ export * from './custom.exception';
 export * from './dto.exception';
 export * from './notfound.exception';
 export * from './unauthorized.exception';
+export * from './forbidden.exception';

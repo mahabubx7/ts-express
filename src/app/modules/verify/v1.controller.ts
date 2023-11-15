@@ -1,5 +1,4 @@
-import { Controller, CustomException, NotFoundException, getFromRedis } from "@core";
-import { userQuery } from "@modules";
+import { Controller, NotFoundException, getFromRedis } from "@core";
 import { verifyQuery } from "./verify.query";
 
 export const verifyEmail: Controller = async (req, res) => {

@@ -9,13 +9,21 @@ export const loginUser: Controller = async (req, res) => {
    * Passport middleware validates user
    * Validated info & others available in `req.user`
    */
-  const { user } = req;
+  const { accessToken, refreshToken, jwtPayload } = req.state;
 
-  res.cookie('access_token', user?.accessToken, cookieOptions);
+  req.user = jwtPayload;
 
-  res.cookie('refresh_token', user?.refreshToken, cookieOptions);
+  res.cookie('access_token', accessToken, cookieOptions);
 
-  res.toJson(user?.data, null, 200, 'Login successful!');
+  res.cookie('refresh_token', refreshToken, cookieOptions);
+
+  res.toJson({
+    id: jwtPayload?.sub,
+    email: jwtPayload?.email,
+    role: jwtPayload?.role,
+    ip: jwtPayload?.ip,
+    ua: jwtPayload?.ua,
+  }, null, 200, 'Login successful!');
 
 };
 
@@ -51,7 +59,7 @@ export const registerUser: Controller = async (req, res) => {
        * It sends the verification link & registration welcome message!
        */
       mail: mail,
-    }); // adding mail sending task into emailVerifyQueue
+    }); // adding mail sending task into => 'emailVerifyQueue'
     addToRedis(token, {
       tokenType: 'email_verify',
       userId: data._id,

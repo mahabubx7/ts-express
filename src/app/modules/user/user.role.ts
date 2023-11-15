@@ -1,23 +1,23 @@
 export enum Role {
-  User = 0, // normal or customers
-  Vendor = 1, // sellers or agent
+  User = 'user', // normal or customers
+  Vendor = 'vendor', // sellers or agent
 
-  // Editor = 1.3,
-  // Operator = 1.3,
-  // Moderator = 1.5,
+  // Editor
+  // Operator
+  // Moderator
 
-  // SuperVisor = 2, // works under managers
+  // SuperVisor // works under managers
 
-  Manager = 3, // works under admins
+  Manager = 'manager', // works under admins
 
-  // Auditor = 3.5 // works under admins & power > manager
+  // Auditor // works under admins & power > manager
 
-  Admin = 5, // works under super-admins
+  Admin = 'admin', // works under super-admins
 
-  SuperAdmin = 10, // highest power holders
+  SuperAdmin = 'super_admin', // highest power holders
 
 }
 
 export const typeCheckForRole = (r: unknown) => {
-  return Object.keys(Role).includes(String(r));
+  return Object.values(Role).map(_r => _r.toString()).includes(String(r));
 };

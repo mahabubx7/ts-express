@@ -1,5 +1,5 @@
 import crypto from 'node:crypto';
-import { sign, verify } from "jsonwebtoken";
+import { JwtPayload, sign, verify } from "jsonwebtoken";
 import { APP_SECRET, JWT_SECRET } from "@config";
 import { ObjectId } from "mongoose";
 import { Role } from "@modules";
@@ -13,7 +13,7 @@ export interface TokenDataType {
   sub: ObjectId, // mongodb document @ID type
   email?: string,
   role?: Role,
-  tokenType: 'access_token' | 'refresh_token',
+  tokenType: 'access_token' | 'refresh_token' | 'passport',
   ua?: string,
   ip?: string | undefined,
 }
@@ -37,7 +37,7 @@ export class Token {
     });
   }
 
-  decodeJwt(token: string, ignoreExpiration?: boolean) {
+  decodeJwt(token: string, ignoreExpiration?: boolean): string | JwtPayload | TokenDataType {
     return verify(token, this.jwtSecret, {
       ignoreExpiration: ignoreExpiration ?? false,
     });

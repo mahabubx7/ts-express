@@ -4,11 +4,13 @@ import { ExpressAdapter } from '@bull-board/express';
 import { createBullBoard } from '@bull-board/api'
 import { BullAdapter } from '@bull-board/api/bullAdapter'
 import { applyToJSON } from './response';
+import { applyRequestState } from './state';
 
 // Express App :: Custom modifications
 
 export function applyModifications(app: Application) {
   app.use(applyToJSON);
+  app.use(applyRequestState);
   app.disable('x-powered-by');
 
   // @bull-board integrations :: START //
@@ -31,8 +33,10 @@ export function applyModifications(app: Application) {
 
 export * from './password';
 export * from './passport';
+export * from './policy';
 export * from './token';
 export * from './types';
 export * from './errors';
 export * from './mailer';
 export * from './redis';
+export * from './state';

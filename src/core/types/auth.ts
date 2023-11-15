@@ -1,5 +1,7 @@
-import { User } from "@modules";
+import { Role, User } from "@modules";
 import { ObjectId } from "mongoose";
+import { AuthenticateOptions } from "passport";
+import { AuthPolicy } from "../policy";
 
 export interface UserAuthData {
   _id?: any | ObjectId
@@ -8,4 +10,17 @@ export interface UserAuthData {
   refreshToken: string
   ua?: string
   ip?: string
+}
+
+
+export interface AuthGuardOptions {
+  type: 'local' | 'accessJwt' | 'refreshJwt' | 'apiKey'; // required :: Passport.js auth types
+  passportOptions?: AuthenticateOptions
+}
+
+export interface PermissionGuardArgs {
+  action: string;
+  resource: string;
+  policy: AuthPolicy;
+  options?: any;
 }

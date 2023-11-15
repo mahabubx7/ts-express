@@ -1,6 +1,6 @@
 import { Request } from 'express'
 import { PassportStatic } from "passport";
-import { ExtractJwt, Strategy as JwtStrategy } from "passport-jwt";
+import { ExtractJwt, Strategy as JwtStrategy, VerifyCallback } from "passport-jwt";
 import { Strategy as LocalStrategy } from 'passport-local'
 import { JWT_SECRET } from "@config";
 import { authQuery } from '@modules';
@@ -34,28 +34,30 @@ function extractRefreshToken(req: Request) {
 
 export function setupPassportPlugins(passport: PassportStatic) {
   // ::::::::::::: JWT Strategy <AccessToken> ::::::::::::: //
-  passport.use(
-    'accessToken',
-    new JwtStrategy({
-      jwtFromRequest: ExtractJwt.fromExtractors([extractAccessToken]),
-      secretOrKey: JWT_SECRET,
-      ignoreExpiration: false,
-    }, (jwtPayload, cb) => {
-      console.log('acJwt', jwtPayload);
-      cb(null, jwtPayload);
-    }),
-  );
+
+  const AcJwtStrategyCallback: VerifyCallback = (payload, done) => {
+    // console.log('acJwt', payload);
+    done(null, payload);
+  };
+
+  const AcJwtStrategy = new JwtStrategy({
+    jwtFromRequest: ExtractJwt.fromExtractors([extractAccessToken]),
+    secretOrKey: JWT_SECRET,
+    ignoreExpiration: false,
+  }, AcJwtStrategyCallback);
+
+  passport.use('accessJwt', AcJwtStrategy);
 
   // ::::::::::::: JWT Strategy <RefreshToken> ::::::::::::: //
   passport.use(
-    'refreshToken',
+    'refreshJwt',
     new JwtStrategy({
       jwtFromRequest: ExtractJwt.fromExtractors([extractRefreshToken]),
       secretOrKey: JWT_SECRET,
       ignoreExpiration: false,
-    }, (jwtPayload, cb) => {
-      console.log('rfJwt', jwtPayload);
-      cb(null, jwtPayload);
+    }, (jwtPayload, done) => {
+      // console.log('rfJwt', jwtPayload);
+      done(null, jwtPayload);
     }),
   );
 
@@ -78,12 +80,18 @@ export function setupPassportPlugins(passport: PassportStatic) {
         });
         done(err, false);
       } else {
-        console.log('USER ==> ', loginInfo);
-        done(null, {
-          ...loginInfo,
-          ua: _.headers['user-agent'],
-          ip: _.ip,
-        });
+        _.state.accessToken = loginInfo.accessToken;
+        _.state.refreshToken = loginInfo.refreshToken;
+        _.state.ip = _.ip;
+        _.state.ua = _.headers['user-agent'];
+        const { _id, email, role  } = loginInfo.data;
+        _.state.jwtPayload = {
+          sub: _id,
+          email,
+          role,
+          tokenType: 'passport',
+        };
+        done(null, { ..._.state.jwtPayload });
       }
     }),
   );
