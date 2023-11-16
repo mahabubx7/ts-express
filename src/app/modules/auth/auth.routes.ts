@@ -1,8 +1,8 @@
 import passport from "passport";
 import { Router } from "express";
-import { DtoGuard } from "@guards";
-import { loginUser, registerUser } from "./auth.controller";
-import { loginUserDto, registerUserDto } from "./dto";
+import { AuthGuard, DtoGuard } from "@guards";
+import { changePassword, forgotPassword, loginUser, passwordReset, registerUser } from "./auth.controller";
+import { changePasswordDto, forgotPasswordDto, loginUserDto, registerUserDto, resetPasswordDto } from "./dto";
 
 export const authRoute = Router();
 
@@ -15,13 +15,23 @@ authRoute.post('/login', [
 // user register :: POST /register
 authRoute.post('/register', [
   DtoGuard(registerUserDto),
-  // passport.authenticate('local', { session: false }),
 ], registerUser);
 
-
-// user user email_verification/active
+// password change :: PUT /change-password (#Auth:required)
+authRoute.put('/change-password', [
+  DtoGuard(changePasswordDto),
+  AuthGuard('accessJwt'),
+], changePassword);
 
 // user forget-password/send-mail
+// POST /forgot-password
+authRoute.post('/forgot-password', [
+  DtoGuard(forgotPasswordDto),
+], forgotPassword);
 
-// user forget-password/verify_n_update
+// user forget-password/verify_n_update:change_password
+// PUT /password-reset
+authRoute.put('/password-reset', [
+  DtoGuard(resetPasswordDto),
+], passwordReset);
 

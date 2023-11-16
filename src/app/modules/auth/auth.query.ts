@@ -1,5 +1,6 @@
 import { User, userQuery } from '@modules'
-import { Token, TokenDataType, CustomException, NotFoundException, verifyPassword } from '@core';
+import { Token, TokenDataType, CustomException, NotFoundException, verifyPassword, ForbiddenException } from '@core';
+import { ObjectId } from 'mongoose';
 
 class AuthQuery {
   private readonly token: Token;
@@ -22,6 +23,14 @@ class AuthQuery {
       role: newUser.role,
       isDeleted: newUser.isDeleted,
     }
+  }
+
+  async getUserData(id: ObjectId | string) {
+    return await userQuery.getUserData(id);
+  }
+
+  async getUserDataByEmail(email: string) {
+    return await userQuery.getUserByEmail(email);
   }
 
   async loginUser(email: string, pass: string) {
@@ -101,6 +110,50 @@ class AuthQuery {
       )
     }
   }
+
+
+  async changePassword(id: ObjectId | string, body: {
+    old_password: string,
+    new_password: string,
+    confirm_password: string,
+  }) {
+    const {
+      old_password,
+      new_password,
+      confirm_password,
+    } = body;
+
+    if (new_password !== confirm_password) {
+      throw new CustomException('Bad request!', 406, 'BAD_INPUT', { issues: ['confirm-password isn\'t matching'] });
+    }
+
+    const user = await this.getUserData(id);
+    if (!user) {
+      throw new NotFoundException('User doesn\'t exists!');
+    }
+    console.log('Debug ===> ', old_password, user.password);
+    const checkOldPassword = await verifyPassword(old_password, user.password);
+    if (!checkOldPassword) {
+      throw new ForbiddenException('Access denied!', { issues: ['Wrong credentials!'] });
+    }
+    else if (new_password === old_password) {
+      return { message: 'No need to change! They are same.', status: 'no_change' };
+    }
+
+    try {
+      // all ok: change the password
+      user.password = new_password;
+      await user.save(); // mongoose pre-save interceptor will hash this again
+      return {
+        message: 'Password is changed successfully!',
+        user,
+        status: 'changed'
+      };
+    } catch (err: any) {
+      throw new CustomException('Something went wrong!', 500, 'CHANGE_PASS', err);
+    }
+  }
+
 }
 
 export const authQuery = new AuthQuery();

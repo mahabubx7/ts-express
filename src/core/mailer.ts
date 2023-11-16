@@ -45,6 +45,8 @@ export const cookEmailHtml = (req: Request, data: {
   subHeading?: string
   linkPostfix?: string
   linkExpire?: string
+  linkPostPath?: string
+  raw?: string
 }) => {
   return `
     <html>
@@ -56,6 +58,11 @@ export const cookEmailHtml = (req: Request, data: {
         <h2>${data.heading ?? 'Registration Successful!'}</h2>
         <hr />
         <h3>${data.subHeading ?? 'Please verify your e-mail address to active your account'}</h3>
+
+        ${data.raw ? `
+          <div>${data.raw}</div>
+        ` : ''}
+
         ${data.linkExpire ? (
           `
             <p style="color: red">
@@ -63,7 +70,10 @@ export const cookEmailHtml = (req: Request, data: {
             </p>
           `
         ) : ''}
-        <a href="${req.protocol + '://' + req.get('host')}${data.linkPostfix ?? `/verify/email?token=${Math.random()}`}">verify</a>
+
+        ${data.linkPostfix ? `
+        <a href="${req.protocol + '://' + req.get('host')}${data.linkPostfix ?? `${data.linkPostPath ?? `/verify/email?token`}=${Math.random()}`}">verify</a>
+        ` : ''}
       </body>
     </html>
   `;
