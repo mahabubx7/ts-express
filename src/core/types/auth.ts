@@ -1,5 +1,5 @@
 import { Role, User } from "@modules";
-import { ObjectId } from "mongoose";
+import { Document, Model, ObjectId } from "mongoose";
 import { AuthenticateOptions } from "passport";
 import { AuthPolicy } from "../policy";
 
@@ -19,8 +19,14 @@ export interface AuthGuardOptions {
 }
 
 export interface PermissionGuardArgs {
-  action: string;
+  action: string | string[];
   resource: string;
   policy: AuthPolicy;
-  options?: any;
+  options?: {
+    owner?: {
+      type: 'self_user' | 'resource'
+      entity?: Model<any, any, any>
+      field?: string
+    }
+  };
 }

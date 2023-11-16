@@ -1,5 +1,3 @@
-import { CustomException } from "./errors";
-
 export class PermissionPolicy {
   private permissions: { [key: string]: string[] };
   private readonly resource: string;

@@ -33,11 +33,11 @@ export class UserQuery {
   }
 
   async updateUser(id: ObjectId | string, user: Partial<User>): Promise<User | null> {
-    return await this.mongo.findByIdAndUpdate(id, user);
+    return await this.mongo.findByIdAndUpdate(id, user, { new: true }).select('-__v -password');
   }
 
   async removeUser(id: ObjectId | string): Promise<User | null> {
-    return await this.mongo.findByIdAndUpdate(id, { isDeleted: true });
+    return await this.mongo.findByIdAndUpdate(id, { isDeleted: true }, { new: true }).select('-__v -password');
   }
 }
 
