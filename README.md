@@ -16,7 +16,6 @@
 - Cron jobs with `node-cron` and Queues with `bull`
 - Mailing feature with `nodemailer`
 - Logger using `winstone` or `morgan` or something else
-- Real-time communication using `websocket`/`socket.io`
 - API response caching with `redis`
 
 #### Todo:
@@ -24,7 +23,8 @@
 - [x] Make custom `access-control` with roles & its hierarchy based permissions.
 - [] Parse and assign DTO after result into `req.bodyParsed` or `req.zod.results`
 - [] Implement Tests (Unit, Integrations and e2e [at least for Auth & Todo])
-- [] Implement real-time communication setup
+- [x] Logger setup for `dev` or `production` mode
 - [] Complete and Run production app with Docker (compose) + Caddy/Nginx.
+- [] (optional) Implement real-time communication setup
 - [] (optional) Setup file uploads and retriever (i.e. `multer`, `aws-s3` or `minIo`)
 - [] (optional) Implement API Documentation. [Recommended: `swagger`]

@@ -3,8 +3,11 @@ import { queues } from '@jobs';
 import { ExpressAdapter } from '@bull-board/express';
 import { createBullBoard } from '@bull-board/api'
 import { BullAdapter } from '@bull-board/api/bullAdapter'
+import { IsTestMode } from '@config';
 import { applyToJSON } from './response';
 import { applyRequestState } from './state';
+import { logger } from './logger';
+
 
 // Express App :: Custom modifications
 
@@ -12,6 +15,13 @@ export function applyModifications(app: Application) {
   app.use(applyToJSON);
   app.use(applyRequestState);
   app.disable('x-powered-by');
+
+  if (!IsTestMode) {
+    app.use((req, _, __) => {
+      logger.info(`${req.method} ${req.path}`);
+      __(); // proceed to next
+    });
+  }
 
   // @bull-board integrations :: START //
   const queueAdapters = queues.map((q) => new BullAdapter(q))
@@ -40,3 +50,4 @@ export * from './errors';
 export * from './mailer';
 export * from './redis';
 export * from './state';
+export * from './logger';

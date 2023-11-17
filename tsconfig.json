@@ -22,7 +22,8 @@
     },
   },
   "files": [
-    "./src/core/express.d.ts"
+    "./src/core/express.d.ts",
+    "./src/core/env.d.ts",
   ],
   "include": ["src", "prisma"],
   "exclude": ["**/node_modules", "**/dist/**"]

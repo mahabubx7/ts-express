@@ -7,8 +7,8 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
 import { router } from '@router';
-import { PORT, connectMongoDB } from '@config';
-import { applyModifications, globalErrorHandlerPipe, setupPassportPlugins } from '@core';
+import { IsTestMode, PORT, connectMongoDB } from '@config';
+import { applyModifications, globalErrorHandlerPipe, logger, setupPassportPlugins } from '@core';
 import { redis } from './core/redis';
 
 
@@ -32,8 +32,13 @@ app.use('/_static', express.static(path.resolve(__dirname, './public')));
 
 // Establish database connection
 (async () => {
-  await connectMongoDB();
-  redis.once('connect', () => console.info(`🍎 Redis connection is established!`));
+  try {
+    redis.once('connect', () => console.info(`🍎 Redis connection is established!`));
+    await connectMongoDB();
+  } catch (err) {
+    console.error(err)
+    logger.error('Database related error: ', err)
+  }
 })();
 
 // app.use(asyncRouteHandler(router)); // should be at last
@@ -41,6 +46,18 @@ app.use(router); // should be at last
 app.use(globalErrorHandlerPipe); // should be at last of all
 
 async function boot() {
+
+  if (!IsTestMode) {
+    // handling server crash logs
+    process.on('uncaughtException', (err) => {
+      logger.error('Uncaught Exception', err);
+    });
+
+    process.on('unhandledRejection', (err, _) => {
+      logger.error('Unhandled Promise Rejection', err);
+    });
+  }
+
   app.listen(PORT, () => {
     console.log(`🖥 Server ready at http://localhost:${PORT}`)
   })

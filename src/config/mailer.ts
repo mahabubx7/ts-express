@@ -1,5 +1,5 @@
 import { createTransport } from "nodemailer";
-import { IsProdMode, MAILER_HOST, MAILER_PASS, MAILER_USER } from "./variables";
+import { IsProdMode, MAILER_PASS, MAILER_USER } from "./variables";
 
 export const mailer = createTransport({
   service: 'gmail',
