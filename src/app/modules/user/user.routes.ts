@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { AuthGuard, DtoGuard, PermissionGuard } from "@guards";
-import { addUser, getUser, getUserProfile, getUsers, removeUser, updateUser } from "./v1.controller";
+import { addUser, getUser, getUserProfile, getUsers, removeUser, updateUser, updateUserPhoto } from "./v1.controller";
 import { createUserDto, queryWithId, updateUserDto } from "./dto";
 import { userDataPolicy } from "./user.policy";
-import { UserModel } from "./user.model";
+import { uploader } from "@config";
 
 export const userRoute = Router(); // by default: v1
 
@@ -50,6 +50,16 @@ userRoute.put('/:id',
     }),
   ],
   updateUser
+);
+
+
+// POST /photo :: UPDATE USER PROFILE["PHOTO"]
+userRoute.post('/photo',
+  [
+    AuthGuard('accessJwt'),
+    uploader.single('photo'),
+  ],
+  updateUserPhoto
 );
 
 // DELETE / :: REMOVE A USER

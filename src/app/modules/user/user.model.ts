@@ -8,6 +8,18 @@ export interface User extends Document {
   password: string
   isDeleted: boolean
   role: Role
+  profile: {
+    photo: string
+    age?: number
+    gender?: string
+    address?: {
+      line_1: string
+      line_2?: string
+      zip_code: string
+      state: string
+      country: string
+    }
+  };
   isEmailVerified: boolean
   isActive: boolean
 }
@@ -31,6 +43,12 @@ const userSchema = new Schema<User>({
     type: String,
     enum: Role,
     default: Role.User,
+  },
+  profile: {
+    type: Object,
+    default: {
+      photo: 'user.png',
+    },
   },
   isDeleted: {
     type: Boolean,

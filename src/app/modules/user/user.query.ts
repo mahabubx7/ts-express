@@ -36,6 +36,16 @@ export class UserQuery {
     return await this.mongo.findByIdAndUpdate(id, user, { new: true }).select('-__v -password');
   }
 
+  async updateUserPhoto(id: ObjectId | string, photo: string) {
+    return await this.mongo.updateOne({
+      _id: id,
+    }, {
+      $set: {
+        'profile.photo': photo
+      }
+    });
+  }
+
   async removeUser(id: ObjectId | string): Promise<User | null> {
     return await this.mongo.findByIdAndUpdate(id, { isDeleted: true }, { new: true }).select('-__v -password');
   }

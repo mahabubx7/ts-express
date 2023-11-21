@@ -21,10 +21,11 @@
 #### Todo:
 
 - [x] Make custom `access-control` with roles & its hierarchy based permissions.
-- [] Parse and assign DTO after result into `req.bodyParsed` or `req.zod.results`
+- [x] Parse and assign DTO after result into `req.bodyParsed` or `req.zod.results`
+- [x] Add Request rate-limiter or throttler
 - [] Implement Tests (Unit, Integrations and e2e [at least for Auth & Todo])
 - [x] Logger setup for `dev` or `production` mode
+- [] Implement API Documentation. [Recommended: `swagger/js-doc`]
 - [] Complete and Run production app with Docker (compose) + Caddy/Nginx.
-- [] (optional) Implement real-time communication setup
 - [] (optional) Setup file uploads and retriever (i.e. `multer`, `aws-s3` or `minIo`)
-- [] (optional) Implement API Documentation. [Recommended: `swagger`]
+- [] (optional) Implement real-time communication setup

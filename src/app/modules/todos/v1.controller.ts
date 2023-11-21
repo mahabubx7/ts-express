@@ -21,29 +21,28 @@ export const getTodos: Controller = async (req, res) => {
 
 // GET :: READ
 export const getTodo: Controller = async (req, res) => {
-  const { id } = req.params;
+  const { params: { id } } = req.parsed;
   const todo = await todoQuery.getTodo(id);
   res.toJson(todo);
 };
 
 // POST :: CREATE
 export const createTodo: Controller = async (req, res) => {
-  const { body, user } = req;
+  const { user, parsed: { body } } = req;
   const todo = await todoQuery.createTodo(new TodoModel({ ...body, author: user?.sub }));
   res.toJson({ message: 'Todo added successfully!', todo }, null, 201);
 };
 
 // PUT :: UPDATE
 export const updateTodo: Controller = async (req, res) => {
-  const { body, params } = req;
-  const { id } = params;
+  const { params: { id }, body } = req.parsed;
   const todo = await todoQuery.updateTodo(id, body);
   res.toJson({ message: 'Todo updated successfully!', todo }, null, 202);
 };
 
 // DELETE
 export const removeTodo: Controller = async (req, res) => {
-  const { id } = req.params;
+  const { params: { id } }= req.parsed;
   const todo = await todoQuery.deleteTodo(id);
   res.toJson({ message: 'Todo deleted successfully!', todo }, null, 202);
 };

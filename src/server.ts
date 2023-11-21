@@ -7,6 +7,7 @@ import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import passport from 'passport';
 import { router } from '@router';
+import { registerCronJobs } from './app/jobs';
 import { IsTestMode, PORT, connectMongoDB } from '@config';
 import { applyModifications, globalErrorHandlerPipe, logger, setupPassportPlugins } from '@core';
 import { redis } from './core/redis';
@@ -60,7 +61,10 @@ async function boot() {
 
   app.listen(PORT, () => {
     console.log(`🖥 Server ready at http://localhost:${PORT}`)
-  })
+  });
+
+  // listen to cron jobs
+  registerCronJobs();
 }
 
 

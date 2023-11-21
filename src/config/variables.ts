@@ -37,3 +37,12 @@ export const MAILER_PASS = process.env.MAILER_PASS
 export const REDIS_HOST = process.env.REDIS_HOST
 export const REDIS_PORT = process.env.REDIS_PORT
 export const REDIS_URI = process.env.REDIS_URI
+
+// Aws S3 (actually I'm using MinIO)
+export const S3_ENDPOINT = process.env.S3_ENDPOINT
+export const S3_FORCE_PATH = process.env.S3_FORCE_PATH
+export const IO_SSL_Enabled = process.env.IO_SSL_ENABLED
+export const iOAccessKey = String(process.env.IO_ACCESS_KEY)
+export const iOSecretKey = String(process.env.IO_SECRET_KEY)
+export const iOServerHost = String(process.env.IO_SERVER_HOST)
+export const iOServerPort = Number(process.env.IO_SERVER_PORT)

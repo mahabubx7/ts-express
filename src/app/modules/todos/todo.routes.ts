@@ -3,8 +3,9 @@ import { AuthGuard, DtoGuard, PermissionGuard } from "@guards";
 import { createTodo, getAllTodo, getTodo, getTodos, removeTodo, updateTodo } from "./v1.controller";
 import { getAllTodo_2 } from "./v2.controller";
 import { todoDataPolicy } from "./todo.policy";
-import { createTodoDto } from "./dto";
+import { createTodoDto, queryWithId, updateTodoDto } from "./dto";
 import { TodoModel } from "./todo.model";
+import { RequestThrottler } from "src/core";
 
 
 export const todoRoute = Router(); // v1
@@ -12,6 +13,7 @@ export const v2TodoRoute = Router(); // v2
 
 // :: --- V1 --- :: // -----------------------------
 
+// CREATE
 todoRoute.post('/', [
   DtoGuard(createTodoDto),
   AuthGuard('accessJwt'),
@@ -22,7 +24,9 @@ todoRoute.post('/', [
   }),
 ], createTodo);
 
+// UPDATE
 todoRoute.put('/:id', [
+  DtoGuard(updateTodoDto),
   AuthGuard('accessJwt'),
   PermissionGuard({
     action: ['update', 'update:own'], // user|update:own && admins|update
@@ -38,7 +42,9 @@ todoRoute.put('/:id', [
   }),
 ], updateTodo);
 
+// DELETE
 todoRoute.delete('/:id', [
+  DtoGuard(queryWithId),
   AuthGuard('accessJwt'),
   PermissionGuard({
     action: ['delete:own', 'delete'], // user|delete:own && admins|delete
@@ -54,6 +60,7 @@ todoRoute.delete('/:id', [
   }),
 ], removeTodo);
 
+// READ :: ALL
 todoRoute.get('/all', [
   AuthGuard('accessJwt'),
   PermissionGuard({
@@ -63,7 +70,9 @@ todoRoute.get('/all', [
   }),
 ], getAllTodo); // for admins only
 
+// READ :: ONE
 todoRoute.get('/:id', [
+  DtoGuard(queryWithId),
   AuthGuard('accessJwt'),
   PermissionGuard({
     action: ['read', 'read:own'], // user|read:own && admins|read
@@ -79,7 +88,9 @@ todoRoute.get('/:id', [
   }),
 ], getTodo);
 
+// READ :: OWN:LIST
 todoRoute.get('/', [
+  RequestThrottler(5), // test limit 5 hits / 30 sec
   AuthGuard('accessJwt'),
   PermissionGuard({
     action: 'read:list',

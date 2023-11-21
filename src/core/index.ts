@@ -16,6 +16,7 @@ export function applyModifications(app: Application) {
   app.use(applyRequestState);
   app.disable('x-powered-by');
 
+
   if (!IsTestMode) {
     app.use((req, _, __) => {
       logger.info(`${req.method} ${req.path}`);
@@ -51,3 +52,4 @@ export * from './mailer';
 export * from './redis';
 export * from './state';
 export * from './logger';
+export * from './throttler';

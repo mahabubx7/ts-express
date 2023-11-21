@@ -17,6 +17,7 @@ declare global {
 
     interface Request {
       user: User
+      parsed: {[x: string]: any}
       state: State
     }
   }

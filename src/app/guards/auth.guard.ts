@@ -29,8 +29,6 @@ async function validateOwner(
       return next(new CustomException('Auth metadata not found!'));
     }
 
-    console.log('We are in Validate Owner ...', user);
-
     const { id } = request.params;
 
     if (!id || !isValidObjectId(id)) {
@@ -38,28 +36,22 @@ async function validateOwner(
     }
 
     if (ownerOptions && ownerOptions.owner) {
-      console.log('We are in ownerOptions ...');
       // Owner handler
       const { type, entity, field } = ownerOptions.owner;
-      console.log('What we got in ownerOptions ... ', { type, entity, field });
+
       //
       if (type === 'self_user') {
         // check current user for user_data
-        console.log('SELF --- CHECK passed!');
         status = checker<string>(String(user.sub), id);
       }
       else if (type === 'resource') {
-        console.log('We are in Resource Type:checker ...');
         // check owner of given resource
         if (!entity || !field) {
           return next(new CustomException('Auth metadata corrupted or invalid!'));
         }
         const getSourceData = await entity.findById(id);
-        console.log('resource:checker had ... ', String(user.sub), String(getSourceData[field]));
         status = checker<string>(String(user.sub), String(getSourceData[field]));
-        console.log('Resource Type:checker result => ', status);
       }
-
     }
     //
     return status;
@@ -85,7 +77,6 @@ export const PermissionGuard = (args: PermissionGuardArgs): Guard => {
 
       if (action.includes(':own')) {
         const result = await validateOwner(_, next, options, checkOwner);
-        console.log('The result ... ', result);
         if (!result) {
           return next(new ForbiddenException('Sorry! you\'re not the owner!')); //
         } else if (result && checkPermission(user.role, action, permissions)) {
@@ -109,7 +100,6 @@ export const PermissionGuard = (args: PermissionGuardArgs): Guard => {
         // check owner first
         if (_action.includes(':own')) {
           const result = await validateOwner(_, next, options, checkOwner);
-          console.log('The result ... ', result);
           if (!result) {
             return next(new ForbiddenException('Sorry! you\'re not the owner!')); //
           } else if (result && checkPermission(user.role, _action, permissions)) {

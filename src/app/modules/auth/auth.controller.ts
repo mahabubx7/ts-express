@@ -29,7 +29,7 @@ export const loginUser: Controller = async (req, res) => {
 
 
 export const registerUser: Controller = async (req, res) => {
-  const { body } = req;
+  const { body } = req.parsed;
 
   const {
     data,

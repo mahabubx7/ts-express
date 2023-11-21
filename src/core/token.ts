@@ -27,8 +27,15 @@ export class Token {
     this.appSecret = APP_SECRET;
   }
 
-  genToken() {
-    return crypto.randomUUID();
+  genToken(type: 'short' | 'hex' | 'uuid' = 'uuid') {
+    if (type === 'uuid') return crypto.randomUUID();
+
+    else if (type === 'short') {
+      return crypto.randomBytes(16).toString('hex').slice(0, 16);
+    }
+
+    // long hex token
+    return crypto.randomBytes(32).toString('hex');
   }
 
   generateJwt({ data, expires }: JwtTokenGenOptions) {
