@@ -15,7 +15,7 @@ const iOConnection = new Client({
 export const uploader = multer({
   storage: multer.diskStorage({
     destination: (_, __, cb) => {
-      cb(null, path.resolve(__dirname, '../../uploads'));
+      cb(null, path.resolve(__dirname, '../../tmp/uploads'));
     },
     filename: (_, file, cb) => {
       const ext = file.mimetype.split("/")[1];

@@ -19,8 +19,9 @@ src/logs/*
 !.env.example
 
 # Others
-uploads/*
-!uploads/
+tmp/uploads/*
+!tmp/uploads
+!tmp
 
 
 # OS Specific
