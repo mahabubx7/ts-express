@@ -20,8 +20,8 @@ src/logs/*
 
 # Others
 tmp/uploads/*
-!tmp/uploads
-!tmp
+!tmp/
+
 
 
 # OS Specific
