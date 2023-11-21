@@ -1,6 +1,5 @@
-import { Controller, CustomException, Token } from "@core";
+import { Controller, CustomException, Token, readFile, uploadFile } from "@core";
 import { userQuery } from "./user.query";
-import { uploadFile } from "src/config/fileIo";
 
 export const getUsers: Controller = async (_, res) => {
   const users = await userQuery.getUsers();
@@ -34,18 +33,25 @@ export const updateUser: Controller = async (req, res) => {
 // file upload test
 export const updateUserPhoto: Controller = async (req, res) => {
   const { user, file } = req;
-  // const objKey = new Token().genToken();
-  // const fileData = await uploadFile(file, 'user-data', objKey);
-  // console.log(fileData);
-
   if (!file) {
     throw new CustomException('File not uploaded!')
   }
+  const { filename, mimetype } = file;
+  const tokenKey = new Token().genToken('hex');
+  await uploadFile('user-photos', tokenKey, {
+    mimetype,
+    filename,
+  });
 
-  console.log('File ------- ', file);
-
-  const updated = await userQuery.updateUserPhoto(String(user?.sub), file.filename)
+  const updated = await userQuery.updateUserPhoto(String(user?.sub), filename);
   res.toJson(updated, null, 202);
+};
+
+// file retrieve test
+export const loadUserPhoto: Controller = async (req, res) => {
+  const { params } = req;
+  const etag = String(params.etag);
+  await readFile(res, 'user-photos', etag);
 };
 
 export const removeUser: Controller = async (req, res) => {

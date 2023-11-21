@@ -23,9 +23,9 @@
 - [x] Make custom `access-control` with roles & its hierarchy based permissions.
 - [x] Parse and assign DTO after result into `req.bodyParsed` or `req.zod.results`
 - [x] Add Request rate-limiter or throttler
-- [] Implement Tests (Unit, Integrations and e2e [at least for Auth & Todo])
 - [x] Logger setup for `dev` or `production` mode
+- [x] Setup file uploads and retriever (i.e. `multer`, `aws-s3` or `minIo`)
 - [] Implement API Documentation. [Recommended: `swagger/js-doc`]
+- [] Implement Tests (Unit, Integrations and e2e [at least for Auth & Todo])
 - [] Complete and Run production app with Docker (compose) + Caddy/Nginx.
-- [] (optional) Setup file uploads and retriever (i.e. `multer`, `aws-s3` or `minIo`)
 - [] (optional) Implement real-time communication setup

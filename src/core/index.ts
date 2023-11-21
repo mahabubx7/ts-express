@@ -5,8 +5,8 @@ import { createBullBoard } from '@bull-board/api'
 import { BullAdapter } from '@bull-board/api/bullAdapter'
 import { IsTestMode } from '@config';
 import { applyToJSON } from './response';
-import { applyRequestState } from './state';
 import { logger } from './logger';
+import { applyRequestState } from './state';
 
 
 // Express App :: Custom modifications
@@ -50,6 +50,7 @@ export * from './types';
 export * from './errors';
 export * from './mailer';
 export * from './redis';
+export * from './file-io';
 export * from './state';
 export * from './logger';
 export * from './throttler';

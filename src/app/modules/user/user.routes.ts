@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { AuthGuard, DtoGuard, PermissionGuard } from "@guards";
-import { addUser, getUser, getUserProfile, getUsers, removeUser, updateUser, updateUserPhoto } from "./v1.controller";
+import { addUser, getUser, getUserProfile, getUsers, loadUserPhoto, removeUser, updateUser, updateUserPhoto } from "./v1.controller";
 import { createUserDto, queryWithId, updateUserDto } from "./dto";
 import { userDataPolicy } from "./user.policy";
 import { uploader } from "@config";
@@ -61,6 +61,11 @@ userRoute.post('/photo',
   ],
   updateUserPhoto
 );
+
+// GET /photo/etag :: GET USER PROFILE["PHOTO"]
+userRoute.get('/photo/:etag', [
+  AuthGuard('accessJwt'),
+], loadUserPhoto);
 
 // DELETE / :: REMOVE A USER
 userRoute.delete('/:id',
