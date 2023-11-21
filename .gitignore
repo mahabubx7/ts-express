@@ -18,6 +18,11 @@ src/logs/*
 !.env.sample
 !.env.example
 
+# Others
+uploads/*
+!uploads/
+
+
 # OS Specific
 .DS_Store
 .exe
