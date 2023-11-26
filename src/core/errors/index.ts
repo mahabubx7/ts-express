@@ -1,5 +1,6 @@
 import { NextFunction, Request, Response } from "express";
 import { ZodError } from "zod";
+import { logger } from "../logger";
 
 export const globalErrorHandlerPipe = (
   err: any,
@@ -7,12 +8,17 @@ export const globalErrorHandlerPipe = (
   res: Response,
   next: NextFunction
 ) => {
+  const errCode = err.code ?? 500;
+
   if (err instanceof ZodError) {
     res.toJson(false, err, 406, err.message);
   } else {
-    res.toJson(null, err, err.code ?? 500, err.message ?? 'Something went wrong!');
+    res.toJson(null, err, errCode, err.message ?? 'Something went wrong!');
   }
 
+  if ([500, 501, 502].includes(errCode)) {
+    logger.error('Internal Error: ', err);
+  }
   next(err);
 };
 
@@ -20,3 +26,6 @@ export const globalErrorHandlerPipe = (
 // exports
 export * from './custom.exception';
 export * from './dto.exception';
+export * from './notfound.exception';
+export * from './unauthorized.exception';
+export * from './forbidden.exception';

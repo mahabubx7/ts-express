@@ -7,9 +7,9 @@ interface ToJSON {
   statusCode?: number;
 }
 
-function toJson(
+function toJson<T = any>(
   this: Response,
-  data: any,
+  data: T,
   error?: any,
   statusCode?: number | undefined,
   message?: string | undefined,
@@ -20,9 +20,9 @@ function toJson(
   modifiedJson.data = data ? data : null;
   modifiedJson.error = error ? error : null;
 
+
   this.status(statusCode ?? 200).json(modifiedJson);
 };
-
 export function applyToJSON(_: Request, res: Response, next: NextFunction) {
   res.toJson = toJson;
   next();

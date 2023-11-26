@@ -2,6 +2,10 @@
 node_modules/
 dist/
 
+# App specific
+src/logs/*
+!src/logs/.keep
+
 # Environment variables
 .env
 .environment
@@ -13,6 +17,12 @@ dist/
 .env.dev
 !.env.sample
 !.env.example
+
+# Others
+tmp/uploads/*
+!tmp/
+
+
 
 # OS Specific
 .DS_Store

@@ -18,11 +18,12 @@
       "@modules": ["./src/app/modules/"],
       "@core": ["./src/core/"],
       "@guards": ["./src/app/guards/"],
-      "@router": ["./src/app/routes/"]
+      "@router": ["./src/app/router/"]
     },
   },
   "files": [
-    "./src/core/express.d.ts"
+    "./src/core/express.d.ts",
+    "./src/core/env.d.ts",
   ],
   "include": ["src", "prisma"],
   "exclude": ["**/node_modules", "**/dist/**"]
